@@ -61,7 +61,7 @@ def propagate(in_fname, out_fname):
     wf.params.Mesh.xMax=wf.params.Mesh.xMax*1.e-4
     wf.params.Mesh.yMin=wf.params.Mesh.yMin*1.e-4
     wf.params.Mesh.yMax=wf.params.Mesh.yMax*1.e-4
-
+    wf.data.arrEver=arrEver*1e4
 
     print('Saving the wavefront data after propagating:'+out_fname)
     wf.store_hdf5(out_fname)
