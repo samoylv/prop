@@ -18,9 +18,9 @@ import sys
 import os
 import errno
 
-#sys.path.insert(0,'/data/S2E/packages/WPG/')
+sys.path.insert(0,'/data/S2E/packages/WPG/')
 
-sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
+#sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
 
 import multiprocessing
 from glob import glob
