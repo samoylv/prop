@@ -126,12 +126,12 @@ def directory_process(in_dname, out_dname, cpu_number):
 def main():
     from optparse import OptionParser
     parser = OptionParser()
-    parser.add_option("-if", "--input-file", dest="in_fname", help="Input wavefront file")
-    parser.add_option("-of", "--out-file", dest="out_fname", help="Output wavefront file")
+    parser.add_option("--input-file", dest="in_fname", help="Input wavefront file")
+    parser.add_option("--out-file", dest="out_fname", help="Output wavefront file")
     
-    parser.add_option("-id", "--input-directory", dest="in_dname", help="Input directory with wavefront files")
-    parser.add_option("-od", "--output-directory", dest="out_dame", help="Output directory with wavefront files")
-    parser.add_option("-ncpus", "--cpu-number", dest="cpu_number", default=int((multiprocessing.cpu_count()+1)/2),
+    parser.add_option("--input-directory", dest="in_dname", help="Input directory with wavefront files")
+    parser.add_option("--output-directory", dest="out_dame", help="Output directory with wavefront files")
+    parser.add_option("-n", "--cpu-number", dest="cpu_number", default=int((multiprocessing.cpu_count()+1)/2),
                       help="Number of cores for batch wavefronts propagation, default value NUMBER_OF_CPU/2")
 
     (options, args) = parser.parse_args()
