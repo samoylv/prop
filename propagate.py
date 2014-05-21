@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 # Contact L.Samoylova <liubov.samoylova@xfel.eu>, A.Buzmakov <buzmakov@gmail.com>
 # SPB S2E simulation project, European XFEL Hamburg <www.xfel.eu>
@@ -18,9 +18,9 @@ import sys
 import os
 import errno
 
-sys.path.insert(0,'/data/S2E/packages/WPG/')
-#
-# sys.path.insert(0,'../..')
+#sys.path.insert(0,'/data/S2E/packages/WPG/')
+
+sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
 
 import multiprocessing
 from glob import glob
@@ -34,7 +34,7 @@ from wpg.optical_elements import Use_PP
 #from wpg.srwlib import srwl,SRWLOptD,SRWLOptA,SRWLOptC,SRWLOptT,SRWLOptL, SRWLOpt
 
 
-# In[1]:
+# In[3]:
 
 def mkdir_p(path):
     """
@@ -49,7 +49,7 @@ def mkdir_p(path):
             raise
 
 
-# In[5]:
+# In[4]:
 
 def add_history(wf_file_name, history_file_name):
     with h5py.File(wf_file_name) as wf_h5:
@@ -66,7 +66,7 @@ def add_history(wf_file_name, history_file_name):
                    wf_h5['history']['parent']['data'] = h5py.ExternalLink(history_file_name,'/data')
 
 
-# In[7]:
+# In[5]:
 
 def propagate(in_fname, out_fname):
     print('Start propagating:'+in_fname)
@@ -90,44 +90,48 @@ def propagate(in_fname, out_fname):
     wf.params.Mesh.yMax=wf.params.Mesh.yMax*1.e-4
 
 
-    print('Saving the wavefront data after propagating:'+out_fname)
+    print('Saving the wavefront data after propagation:'+out_fname)
     mkdir_p(os.path.dirname(out_fname))
     wf.store_hdf5(out_fname)
     add_history(out_fname, in_fname)
 
 
-# In[11]:
+# In[32]:
 
-def propagate_wrap(*params):
-    in_fname, out_fname = params
+def propagate_wrapper(params):
+    (in_fname, out_fname) = params
     return propagate(in_fname, out_fname)
 
 
-# In[3]:
+# In[45]:
 
 def directory_process(in_dname, out_dname, cpu_number):
-    input_files = glob(os.path.join(in_dname,'FELsource','*.h5'))
+    input_dir = in_dname
+    input_files = glob(os.path.join(input_dir, '*.h5'))
     out_files = []
     for name in input_files:
         in_file_name = os.path.split(name)[-1]
         out_file_name = in_file_name.replace('prop_in','prop_out')
-        out_files.append(os.path.join(out_dname,'prop',out_file_name))
+        out_files.append(os.path.join(out_dname, out_file_name))
+    
+    print 'Found {} HDF5 files in {}'.format(len(input_files), in_dname)
     
     batch_params = zip(input_files, out_files)
-    print 'Found {} HDF5 files in {}'.format(len(input_files), in_dname)
+    
     p=multiprocessing.Pool(processes=cpu_number)
-    p.map(propagate_wrap, batch_params, chunksize=1)
-    p.join()
+#     map(propagate_wrapper, batch_params)
+    p.map(propagate_wrapper, batch_params, chunksize=1)
     p.close()
+    p.join()
 
 
-# In[8]:
+# In[38]:
 
 def main():
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("--input-file", dest="in_fname", help="Input wavefront file")
-    parser.add_option("--out-file", dest="out_fname", help="Output wavefront file")
+    parser.add_option("--output-file", dest="out_fname", help="Output wavefront file")
     
     parser.add_option("--input-directory", dest="in_dname", help="Input directory with wavefront files")
     parser.add_option("--output-directory", dest="out_dname", help="Output directory with wavefront files")
@@ -138,11 +142,11 @@ def main():
     
     
     if not (options.in_fname or options.in_dname):   # if filename is not given
-        parser.error('Input filename or directiry not specified, use -if or -id options')
+        parser.error('Input filename or directiry not specified, use --input-file or --input-directory options')
         return 
     
     if not (options.out_fname or options.out_dname):   # if filename is not given
-        parser.error('Output filename or directiry not specified, use -of or -od options')
+        parser.error('Output filename or directiry not specified, use --output-file or --output-directory options')
         return
     
     if options.in_dname and options.out_dname:
