@@ -106,12 +106,12 @@ def propagate_wrap(*params):
 # In[3]:
 
 def directory_process(in_dname, out_dname, cpu_number):
-    input_files = glob(os.path.join(in_dname,'*.h5'))
+    input_files = glob(os.path.join(in_dname,'FELsource','*.h5'))
     out_files = []
     for name in input_files:
         in_file_name = os.path.split(name)[-1]
         out_file_name = in_file_name.replace('prop_in','prop_out')
-        out_files.append(os.path.join(out_dname,out_file_name))
+        out_files.append(os.path.join(out_dname,'prop',out_file_name))
     
     batch_params = zip(input_files, out_files)
     print 'Found {} HDF5 files in {}'.format(len(input_files), in_dname)
