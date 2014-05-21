@@ -7,5 +7,7 @@ Sources hosted at git repository https://github.com/samoylv/prop.git
 propagate.py - simple script for propagation with support of wavefront history.
 
 Usage (propagate.py -h) 
-python propagate.py -i input_file_name -o ouput_file_name
+python propagate.py -if input_file_name -of ouput_file_name
+
+python propagate.py -id input_directory_name -od ouput_directory_name
 
