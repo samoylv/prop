@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 # Contact L.Samoylova <liubov.samoylova@xfel.eu>, A.Buzmakov <buzmakov@gmail.com>
 # SPB S2E simulation project, European XFEL Hamburg <www.xfel.eu>
@@ -11,7 +11,7 @@
 # WPG framework <https://github.com/samoylv/WPG>
 
 
-# In[2]:
+# In[ ]:
 
 #$
 import sys
@@ -34,7 +34,7 @@ from wpg.optical_elements import Use_PP
 #from wpg.srwlib import srwl,SRWLOptD,SRWLOptA,SRWLOptC,SRWLOptT,SRWLOptL, SRWLOpt
 
 
-# In[3]:
+# In[ ]:
 
 def mkdir_p(path):
     """
@@ -49,7 +49,7 @@ def mkdir_p(path):
             raise
 
 
-# In[4]:
+# In[ ]:
 
 def add_history(wf_file_name, history_file_name):
     with h5py.File(wf_file_name) as wf_h5:
@@ -58,15 +58,27 @@ def add_history(wf_file_name, history_file_name):
                 del wf_h5['history']
             
             wf_h5.create_group('/history/parent')
+            wf_h5.create_group('/history/detail')
             
             for k in history_h5:
-                if not k == 'data':
-                   history_h5.copy(k,wf_h5['history']['parent'])
+                if k=='history':
+                    try:
+                        history_h5.copy(k+'/parent',wf_h5['history']['parent'])
+                    except KeyError:
+                        pass
+                    
+                    try:
+                        history_h5.copy(k+'/detail',wf_h5['history']['parent'])
+                    except KeyError:
+                        pass
+                    
+                elif not k == 'data':
+                    history_h5.copy(k,wf_h5['history']['detail'])
                 else:
-                   wf_h5['history']['parent']['data'] = h5py.ExternalLink(history_file_name,'/data')
+                    wf_h5['history']['detail']['data'] = h5py.ExternalLink(history_file_name,'/data')
 
 
-# In[5]:
+# In[ ]:
 
 def propagate(in_fname, out_fname):
     print('Start propagating:'+in_fname)
@@ -96,14 +108,14 @@ def propagate(in_fname, out_fname):
     add_history(out_fname, in_fname)
 
 
-# In[32]:
+# In[ ]:
 
 def propagate_wrapper(params):
     (in_fname, out_fname) = params
     return propagate(in_fname, out_fname)
 
 
-# In[45]:
+# In[ ]:
 
 def directory_process(in_dname, out_dname, cpu_number):
     input_dir = in_dname
@@ -125,7 +137,7 @@ def directory_process(in_dname, out_dname, cpu_number):
     p.join()
 
 
-# In[38]:
+# In[ ]:
 
 def main():
     from optparse import OptionParser
@@ -165,4 +177,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# In[ ]:
+
+#directory_process('simulation_test/FELsource/','simulation_test/prop/',4)
 
