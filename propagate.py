@@ -13,14 +13,22 @@
 
 # In[ ]:
 
+isS2E = False   # True if running at S2E server
+isIpynb = False # True if ipython notebook, in python script should be false 
+
+
+# In[ ]:
+
 #$
 import sys
 import os
 import errno
 
-sys.path.insert(0,'/data/S2E/packages/WPG/')
-
-#sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
+if isS2E:
+    sys.path.insert(0,'/data/S2E/packages/WPG/')
+else:
+#    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
+    sys.path.insert(0,'../..')
 
 import multiprocessing
 from glob import glob
@@ -63,12 +71,12 @@ def add_history(wf_file_name, history_file_name):
             for k in history_h5:
                 if k=='history':
                     try:
-                        history_h5.copy(k+'/parent',wf_h5['history']['parent'])
+                        history_h5.copy(k+'/parent', wf_h5['history']['parent'])
                     except KeyError:
                         pass
                     
                     try:
-                        history_h5.copy(k+'/detail',wf_h5['history']['parent'])
+                        history_h5.copy(k+'/detail', wf_h5['history']['parent'])
                     except KeyError:
                         pass
                     
@@ -81,28 +89,30 @@ def add_history(wf_file_name, history_file_name):
 # In[ ]:
 
 def propagate(in_fname, out_fname):
-    print('Start propagating:'+in_fname)
+    print('Start propagating:' + in_fname)
     wf=Wavefront()
     wf.load_hdf5(in_fname)
-    distance = 100.
+    distance = 300.
+    foc_dist = 10.
     drift0 = wpg.optical_elements.Drift(distance)
-    #srwl_bl0 = SRWLOptC([drift0, ], [Use_PP(semi_analytical_treatment=1,zoom=0.1,sampling=4)])
-    #bl0 = wpg.Beamline(srwl_bl0)
+    lens0  = wpg.optical_elements.Lens(foc_dist, foc_dist)
+    drift1 = wpg.optical_elements.Drift(1./(1./foc_dist - 1./distance))
+    ##srwl_bl0 = SRWLOptC([drift0, ], [Use_PP(semi_analytical_treatment=1,zoom=0.1,sampling=4)])
+    ##bl0 = wpg.Beamline(srwl_bl0)
 
     bl0 = wpg.Beamline()
-    bl0.append(drift0, Use_PP(semi_analytical_treatment=1,zoom=0.1,sampling=4))
-
+    bl0.append(drift0, Use_PP(semi_analytical_treatment=1, zoom=0.15, sampling=8))
+    bl0.append(lens0,  Use_PP())
+    bl0.append(drift1, Use_PP(semi_analytical_treatment=1, zoom=2.5, sampling=0.4))
+    
+    if isIpynb:
+        print bl0
+    
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 'f')
     bl0.propagate(wf)
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
 
-    wf.params.Mesh.xMin=wf.params.Mesh.xMin*1.e-4
-    wf.params.Mesh.xMax=wf.params.Mesh.xMax*1.e-4
-    wf.params.Mesh.yMin=wf.params.Mesh.yMin*1.e-4
-    wf.params.Mesh.yMax=wf.params.Mesh.yMax*1.e-4
-
-
-    print('Saving the wavefront data after propagation:'+out_fname)
+    print('Saving the wavefront data after propagation:' + out_fname)
     mkdir_p(os.path.dirname(out_fname))
     wf.store_hdf5(out_fname)
     add_history(out_fname, in_fname)
@@ -163,7 +173,7 @@ def main():
     
     if options.in_dname and options.out_dname:
         print 'Input directory {}, output directory {}, number of cores {}'.format(
-            options.in_dname, options.out_dname,options.cpu_number)
+            options.in_dname, options.out_dname, options.cpu_number)
         print 'Batch propagation started'
         directory_process(options.in_dname, options.out_dname, options.cpu_number)
         print 'Batch propagation finished'
@@ -175,11 +185,23 @@ def main():
 
 # In[ ]:
 
-if __name__ == '__main__':
-    main()
+if not isIpynb:
+    if __name__ == '__main__':
+        main()
+else:
+    FID = 2
+    data_dir = '/diskmnt/a/exflwgs03/lsamoylv/code/sim_data'
+    in_fname  = data_dir + '/FELsource/FELsource_out_' + str(FID).zfill(7) + '.h5'
+    out_fname = data_dir + '/prop/prop_out_'           + str(FID).zfill(7) + '.h5'
+    propagate(in_fname, out_fname)
 
 
 # In[ ]:
 
 #directory_process('simulation_test/FELsource/','simulation_test/prop/',4)
+
+
+# In[ ]:
+
+
 
