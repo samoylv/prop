@@ -13,7 +13,7 @@
 
 # In[ ]:
 
-isS2E = False   # True if running at S2E server
+isS2E = True   # True if running at S2E server
 isIpynb = False # True if ipython notebook, in python script should be false 
 
 
@@ -112,6 +112,9 @@ def propagate(in_fname, out_fname):
     bl0.propagate(wf)
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
 
+    #Resizing: decreasing Range of Horizontal and Vertical Position:
+    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.5, 1, 0.5,  1]);
+    
     print('Saving the wavefront data after propagation:' + out_fname)
     mkdir_p(os.path.dirname(out_fname))
     wf.store_hdf5(out_fname)
@@ -129,11 +132,12 @@ def propagate_wrapper(params):
 
 def directory_process(in_dname, out_dname, cpu_number):
     input_dir = in_dname
-    input_files = glob(os.path.join(input_dir, '*.h5'))
+    input_files = glob(os.path.join(input_dir, 'FELSource_out*.h5'))
     out_files = []
     for name in input_files:
         in_file_name = os.path.split(name)[-1]
-        out_file_name = in_file_name.replace('prop_in','prop_out')
+        out_file_name = in_file_name.replace('FELSource_out','prop_out')
+        print 'out_file_name:',out_file_name
         out_files.append(os.path.join(out_dname, out_file_name))
     
     print 'Found {} HDF5 files in {}'.format(len(input_files), in_dname)
@@ -175,7 +179,7 @@ def main():
         print 'Input directory {}, output directory {}, number of cores {}'.format(
             options.in_dname, options.out_dname, options.cpu_number)
         print 'Batch propagation started'
-        directory_process(options.in_dname, options.out_dname, options.cpu_number)
+        directory_process(options.in_dname, options.out_dname, int(options.cpu_number))
         print 'Batch propagation finished'
         
     elif options.in_fname and options.out_fname:
