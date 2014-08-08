@@ -132,11 +132,11 @@ def propagate_wrapper(params):
 
 def directory_process(in_dname, out_dname, cpu_number):
     input_dir = in_dname
-    input_files = glob(os.path.join(input_dir, 'FELSource_out*.h5'))
+    input_files = glob(os.path.join(input_dir, 'FELsource_out*.h5'))
     out_files = []
     for name in input_files:
         in_file_name = os.path.split(name)[-1]
-        out_file_name = in_file_name.replace('FELSource_out','prop_out')
+        out_file_name = in_file_name.replace('FELsource_out','prop_out')
         print 'out_file_name:',out_file_name
         out_files.append(os.path.join(out_dname, out_file_name))
     
