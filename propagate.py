@@ -13,7 +13,7 @@
 
 # In[ ]:
 
-isS2E = True   # True if running at S2E server
+isS2E = False   # True if running at S2E server
 isIpynb = False # True if ipython notebook, in python script should be false 
 
 
@@ -27,8 +27,8 @@ import errno
 if isS2E:
     sys.path.insert(0,'/data/S2E/packages/WPG/')
 else:
-#    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
-    sys.path.insert(0,'../..')
+    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
+#    sys.path.insert(0,'../..')
 
 import multiprocessing
 from glob import glob
@@ -47,6 +47,8 @@ from wpg.optical_elements import Use_PP
 def mkdir_p(path):
     """
     Create directory tree, if not exists (mkdir -p)
+    
+    :param path: Path to be created
     """
     try:
         os.makedirs(path)
@@ -60,6 +62,12 @@ def mkdir_p(path):
 # In[ ]:
 
 def add_history(wf_file_name, history_file_name):
+    """
+    Add history from pearent file to propagated file
+    
+    :param wf_file_name: output file
+    :param history_file_name: peraent file
+    """
     with h5py.File(wf_file_name) as wf_h5:
         with h5py.File(history_file_name) as history_h5:
             if 'history' in wf_h5:
@@ -88,7 +96,36 @@ def add_history(wf_file_name, history_file_name):
 
 # In[ ]:
 
+def calculate_fwhm(wfr):
+    """
+    Calculate FWHM of the beam calculating number of point bigger then max/2 throuhgt center of the image
+    
+    :param wfr:  wavefront
+    :return: {'fwhm_x':fwhm_x, 'fwhm_y': fwhm_y} in [m]
+    """
+    intens = wfr.get_intensity(polarization='total')
+
+    mesh = wfr.params.Mesh
+    dx = (mesh.xMax-mesh.xMin)/mesh.nx
+    dy = (mesh.yMax-mesh.yMin)/mesh.ny
+
+    x_center = intens[intens.shape[0]//2,:]
+    fwhm_x = len(x_center[x_center>x_center.max()/2])*dx
+
+    y_center = intens[:,intens.shape[1]//2]
+    fwhm_y = len(y_center[y_center>y_center.max()/2])*dy
+    return {'fwhm_x':fwhm_x, 'fwhm_y': fwhm_y}
+
+
+# In[ ]:
+
 def propagate(in_fname, out_fname):
+    """
+    Propagate wavefront
+    
+    :param in_file: input wavefront file
+    :param out_file: output file
+    """
     print('Start propagating:' + in_fname)
     wf=Wavefront()
     wf.load_hdf5(in_fname)
@@ -115,6 +152,12 @@ def propagate(in_fname, out_fname):
     #Resizing: decreasing Range of Horizontal and Vertical Position:
     wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.5, 1, 0.5,  1]);
     
+    fwhm = calculate_fwhm(wf)
+    
+    wf.custom_fields['/misc/xFWHM'] = fwhm['fwhm_x']
+    wf.custom_fields['/misc/yFWHM'] = fwhm['fwhm_y']
+    wf.custom_fields['/params/beamline/printout'] = str(bl0)
+    
     print('Saving the wavefront data after propagation:' + out_fname)
     mkdir_p(os.path.dirname(out_fname))
     wf.store_hdf5(out_fname)
@@ -124,6 +167,9 @@ def propagate(in_fname, out_fname):
 # In[ ]:
 
 def propagate_wrapper(params):
+    """
+    Wrapper for passing parameters as a tupple from multiprocessing module
+    """
     (in_fname, out_fname) = params
     return propagate(in_fname, out_fname)
 
@@ -131,6 +177,14 @@ def propagate_wrapper(params):
 # In[ ]:
 
 def directory_process(in_dname, out_dname, cpu_number):
+    """
+    Process directory with in_dname\FELsource_out*.h5 files and store it after propagation in out_dname\prop_out*.h5 files
+    
+    :param in_dname: input directory name
+    :param out_dname: ouput directory name
+    :param cpu_number: NUmber of CPUs for parallel computing
+    
+    """
     input_dir = in_dname
     input_files = glob(os.path.join(input_dir, 'FELsource_out*.h5'))
     out_files = []
@@ -202,10 +256,7 @@ else:
 
 # In[ ]:
 
+# A.B. testing commands
+#!rm simulation_test/prop/*
 #directory_process('simulation_test/FELsource/','simulation_test/prop/',4)
-
-
-# In[ ]:
-
-
 
