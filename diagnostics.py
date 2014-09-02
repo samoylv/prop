@@ -14,7 +14,8 @@ from wpg import Wavefront
 def show_diagnostics(prop_out_number):
       # read prop_out_.h5
       if not prop_out_number == 'prop_out_1.h5':
-            prop_out_file = "prop_out_{}.h5".format(prop_out_number.zfill(7))
+            #prop_out_file = "prop_out_{}.h5".format(prop_out_number.zfill(7))
+            prop_out_file = "{}.h5".format(prop_out_number.zfill(7))
       else:
             prop_out_file = prop_out_number
 
