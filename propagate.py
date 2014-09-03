@@ -103,7 +103,9 @@ def calculate_fwhm(wfr):
     :param wfr:  wavefront
     :return: {'fwhm_x':fwhm_x, 'fwhm_y': fwhm_y} in [m]
     """
-    intens = wfr.get_intensity(polarization='total')
+#    intens = wfr.get_intensity(polarization='total')
+    intens = wfr.get_intensity(polarization='total').sum(axis=-1);
+
 
     mesh = wfr.params.Mesh
     dx = (mesh.xMax-mesh.xMin)/mesh.nx
