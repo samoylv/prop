@@ -140,7 +140,7 @@ def propagate(in_fname, out_fname):
     ##bl0 = wpg.Beamline(srwl_bl0)
 
     bl0 = wpg.Beamline()
-    bl0.append(drift0, Use_PP(semi_analytical_treatment=1, zoom=0.15, sampling=8))
+    bl0.append(drift0, Use_PP(semi_analytical_treatment=1, zoom=0.30, sampling=8))
     bl0.append(lens0,  Use_PP())
     bl0.append(drift1, Use_PP(semi_analytical_treatment=1, zoom=4.2,  sampling=0.5))
     
