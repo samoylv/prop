@@ -34,6 +34,7 @@ import multiprocessing
 from glob import glob
 
 import h5py
+import numpy as np
 
 #Import base wavefront class
 from wpg import Wavefront
@@ -116,6 +117,27 @@ def calculate_fwhm(wfr):
 
 # In[ ]:
 
+def get_intensity_on_axis(wfr):
+    """
+    Calculate intensity (spectrum in frequency domain) along z-axis (x=y=0)
+
+    :param wfr:  wavefront
+    :return: [z,s0] in [a.u.] if frequency domain
+    """
+
+    wf_intensity = wfr.get_intensity(polarization='horizontal')
+    mesh = wfr.params.Mesh;
+    zmin = mesh.sliceMin;
+    zmax = mesh.sliceMax;
+    sz = np.zeros((mesh.nSlices, 2), dtype='float64')
+    sz[:,0] = np.linspace(zmin, zmax, mesh.nSlices);
+    sz[:,1] = wf_intensity[mesh.nx/2, mesh.ny/2, :] / wf_intensity.max()
+
+    return sz
+
+
+# In[ ]:
+
 def propagate(in_fname, out_fname):
     """
     Propagate wavefront
@@ -143,7 +165,15 @@ def propagate(in_fname, out_fname):
         print bl0
     
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 'f')
+    
+    sz0 = get_intensity_on_axis(wf);
+    wf.custom_fields['/misc/spectrum0'] = sz0
+    
     bl0.propagate(wf)
+    
+    sz1 = get_intensity_on_axis(wf);
+    wf.custom_fields['/misc/spectrum1'] = sz1
+    
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
 
     #Resizing: decreasing Range of Horizontal and Vertical Position:
