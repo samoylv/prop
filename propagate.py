@@ -13,7 +13,7 @@
 
 # In[ ]:
 
-isS2E = True   # True if running at S2E server
+isS2E = True  # True if running at S2E server
 isIpynb = False # True if ipython notebook, in python script should be false 
 
 
@@ -73,25 +73,20 @@ def add_history(wf_file_name, history_file_name):
             if 'history' in wf_h5:
                 del wf_h5['history']
             
-            wf_h5.create_group('/history/parent')
-            wf_h5.create_group('/history/detail')
+            wf_h5.create_group('/history/parent/')
+            wf_h5.create_group('/history/parent/detail')
             
             for k in history_h5:
                 if k=='history':
                     try:
-                        history_h5.copy(k+'/parent', wf_h5['history']['parent'])
+                        history_h5.copy('/history/parent', wf_h5['history']['parent'])
                     except KeyError:
                         pass
-                    
-                    try:
-                        history_h5.copy(k+'/detail', wf_h5['history']['parent'])
-                    except KeyError:
-                        pass
-                    
+                        
                 elif not k == 'data':
-                    history_h5.copy(k,wf_h5['history']['detail'])
+                    history_h5.copy(k,wf_h5['history']['parent']['detail'])
                 else:
-                    wf_h5['history']['detail']['data'] = h5py.ExternalLink(history_file_name,'/data')
+                    wf_h5['history']['parent']['detail']['data'] = h5py.ExternalLink(history_file_name,'/data')
 
 
 # In[ ]:
