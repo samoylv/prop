@@ -151,12 +151,8 @@ def propagate(in_fname, out_fname):
     
     lens0  = wpg.optical_elements.Lens(foc_dist, foc_dist)
     aperture = wpg.optical_elements.Aperture('r','a', 0.9*theta_kb, 0.9*theta_kb)
-    hfm    = wpg.optical_elements.Mirror_elliptical(_p=distance, _q=(distance_hfm_vfm+distance_foc), _ang_graz=theta_kb, \ 
-                                                    _r_sag=1.e+40, _size_tang=0.9, _nvx=cos(theta_kb),  _nvy=0,                                                     _nvz=-sin(theta_kb), _tvx=-sin(theta_kb), _tvy=0, _x=0, _y=0, 
-                                                    _treat_in_out=1)     
-    vfm    = wpg.optical_elements.Mirror_elliptical(_p=(distance+distance_hfm_vfm), _q=distance_foc, _ang_graz=theta_kb, \ 
-                                                    _r_sag=1.e+40, _size_tang=0.9, _nvx=0, _nvy=cos(theta_kb),                                                     _nvz=-sin(theta_kb), _tvx=0, _tvy=-sin(theta_kb), _x=0, _y=0, 
-                                                    _treat_in_out=1) 
+    hfm    = wpg.optical_elements.Mirror_elliptical(_p=distance, _q=(distance_hfm_vfm+distance_foc), _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=cos(theta_kb),  _nvy=0,                                                     _nvz=-sin(theta_kb), _tvx=-sin(theta_kb), _tvy=0, _x=0, _y=0,                                                     _treat_in_out=1)     
+    vfm    = wpg.optical_elements.Mirror_elliptical(_p=(distance+distance_hfm_vfm), _q=distance_foc, _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=0, _nvy=cos(theta_kb),                                                     _nvz=-sin(theta_kb), _tvx=0, _tvy=-sin(theta_kb), _x=0, _y=0,                                                     _treat_in_out=1) 
 
     bl0 = wpg.Beamline()
     bl0.append(drift0,      Use_PP(semi_analytical_treatment=0, zoom=14.4, sampling=1/2.))
