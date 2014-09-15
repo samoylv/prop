@@ -179,8 +179,8 @@ def propagate(in_fname, out_fname):
     ap0   = wpg.optical_elements.Aperture('r','a', 120.e-6, 120.e-6)
     ap1   = wpg.optical_elements.Aperture('r','a', om_clear_ap, 2*om_clear_ap)
     ap_kb = wpg.optical_elements.Aperture('r','a', kb_clear_ap, kb_clear_ap)
-    hfm    = wpg.optical_elements.Mirror_elliptical(_p=distance, _q=(distance_hfm_vfm+distance_foc), _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=cos(theta_kb),  _nvy=0,                                                     _nvz=-sin(theta_kb), _tvx=-sin(theta_kb), _tvy=0, _x=0, _y=0,                                                     _treat_in_out=1)     
-    vfm    = wpg.optical_elements.Mirror_elliptical(_p=(distance+distance_hfm_vfm), _q=distance_foc, _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=0, _nvy=cos(theta_kb),                                                     _nvz=-sin(theta_kb), _tvx=0, _tvy=-sin(theta_kb), _x=0, _y=0,                                                     _treat_in_out=1) 
+    hfm    = wpg.optical_elements.Mirror_elliptical(_p=distance, _q=(distance_hfm_vfm+distance_foc), _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=np.cos(theta_kb),  _nvy=0,                                                     _nvz=-np.sin(theta_kb), _tvx=-np.sin(theta_kb), _tvy=0, _x=0, _y=0,                                                     _treat_in_out=1)     
+    vfm    = wpg.optical_elements.Mirror_elliptical(_p=(distance+distance_hfm_vfm), _q=distance_foc, _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=0, _nvy=np.cos(theta_kb),                                                     _nvz=-np.sin(theta_kb), _tvx=0, _tvy=-np.sin(theta_kb), _x=0, _y=0,                                                     _treat_in_out=1) 
     wf_dist_hfm = wpg.optical_elements.WF_dist(1500, 100, kb_clear_ap, kb_clear_ap)
     defineOPD(wf_dist_hfm, os.path.join(mirror_data_dir,'mirror1.dat'), 2, '\t', 'x',  theta_kb, scale=2)
     if isIpynb:
