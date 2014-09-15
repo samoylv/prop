@@ -32,6 +32,7 @@ import numpy as np
 from wpg import Wavefront
 import wpg.optical_elements
 from wpg.optical_elements import Use_PP
+from wpg.useful_code import srwutils
 #from wpg.srwlib import srwl,SRWLOptD,SRWLOptA,SRWLOptC,SRWLOptT,SRWLOptL, SRWLOpt
 
 
