@@ -16,9 +16,11 @@ import errno
 
 if isS2E:
     sys.path.insert(0,'/data/S2E/packages/WPG/')
+    mirror_data_dir = '/data/S2E/modules/prop/data_common'
 else:
 #    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
     sys.path.insert(0,'../..')
+    mirror_data_dir = '/diskmnt/a/lsamoylv/test/WPG-feature-srw-update/samples/Tutorials/data_common'
 
 import multiprocessing
 from glob import glob
