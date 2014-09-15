@@ -66,7 +66,7 @@ def defineOPD(opTrErMirr, mdatafile, ncol, delim, orient, theta, scale):
     :param theta: mirror incidence angle
     :param scale: scaling factor for the mirror profile
     """
-    heightProfData = numpy.loadtxt(mdatafile).T
+    heightProfData = np.loadtxt(mdatafile).T
     wpg.useful_code.srwutils.AuxTransmAddSurfHeightProfileScaled(opTrErMirr, heightProfData, orient, theta, scale)
     if isIpynb:
         pylab.figure(); pylab.plot(heightProfData[0],heightProfData[ncol-1]*1e9)
@@ -187,14 +187,14 @@ def propagate(in_fname, out_fname):
     defineOPD(wf_dist_hfm, os.path.join(mirror_data_dir,'mirror1.dat'), 2, '\t', 'x',  theta_kb, scale=2)
     if isIpynb:
         meshT = wf_dist_hfm.mesh
-        opdTmp=numpy.array(wf_dist_hfm.arTr)[1::2].reshape(meshT.ny,meshT.nx)
+        opdTmp=np.array(wf_dist_hfm.arTr)[1::2].reshape(meshT.ny,meshT.nx)
         figure(); pylab.imshow(opdTmp,extent=[meshT.xStart,meshT.xFin,meshT.yStart,meshT.yFin])
         pylab.title('OPD [m]');pylab.xlabel('x (m)'); pylab.ylabel('y (m)')  
     wf_dist_vfm = wpg.optical_elements.WF_dist(1100, 1500, kb_clear_ap, kb_clear_ap)
     defineOPD(wf_dist_vfm, os.path.join(mirror_data_dir,'mirror2.dat'), 2, ' ', 'y',  theta_kb, scale=2)
     if isIpynb:
         meshT = wf_dist_vfm.mesh
-        opdTmp=numpy.array(wf_dist_vfm.arTr)[1::2].reshape(meshT.ny,meshT.nx)
+        opdTmp=np.array(wf_dist_vfm.arTr)[1::2].reshape(meshT.ny,meshT.nx)
         figure(); pylab.imshow(opdTmp,extent=[meshT.xStart,meshT.xFin,meshT.yStart,meshT.yFin])
         pylab.title('OPD [m]');pylab.xlabel('x (m)'); pylab.ylabel('y (m)')  
     bl0 = wpg.Beamline()
