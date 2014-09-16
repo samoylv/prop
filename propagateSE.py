@@ -234,27 +234,8 @@ def propagate(in_fname, out_fname):
     sz1 = get_intensity_on_axis(wf);
     wf.custom_fields['/misc/spectrum1'] = sz1
     
-    wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')def defineOPD(opTrErMirr, mdatafile, ncol, delim, orient, theta, scale=1., stretching=1.):
-    """
-    Define optical path difference (OPD) from mirror profile
+    wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
     
-    :param opTrErMirr: the struct with wave front distortions from mirror susrface errors
-    :param mdatafile: an ascii file with mirror profile data
-    :param ncol: number of columns in the mirror profile file
-    :param delim: delimiter between numbers in an row, can be space (' '), tab '\t', etc
-    :param orient: mirror orientation, 'x' (horizontal) or 'y' (vertical)
-    :param theta: mirror incidence angle
-    :param scale: scaling factor for the mirror profile height errors
-    :param stretching: scaling factor for the mirror profile x-axis (a hack, should be removed ASAP) 
-    """
-    heightProfData = numpy.loadtxt(mdatafile).T
-    heightProfData[0,:] = heightProfData[0,:] * stretching
-    wpg.useful_code.srwutils.AuxTransmAddSurfHeightProfileScaled(opTrErMirr, heightProfData, orient, theta, scale)
-    if isIpynb:
-        pylab.figure(); pylab.plot(heightProfData[0],heightProfData[ncol-1]*1e9)
-        pylab.title('profile from %s' %mdatafile);pylab.xlabel('x (m)');pylab.ylabel('h (nm)') 
-
-
     #Resizing: decreasing Range of Horizontal and Vertical Position:
     wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.25, 1, 0.25,  1]);
     
