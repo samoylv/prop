@@ -187,21 +187,21 @@ def propagate(in_fname, out_fname):
     hfm    = wpg.optical_elements.Mirror_elliptical(_p=distance, _q=(distance_hfm_vfm+distance_foc), _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=np.cos(theta_kb),  _nvy=0,                                                     _nvz=-np.sin(theta_kb), _tvx=-np.sin(theta_kb), _tvy=0, _x=0, _y=0,                                                     _treat_in_out=1)     
     vfm    = wpg.optical_elements.Mirror_elliptical(_p=(distance+distance_hfm_vfm), _q=distance_foc, _ang_graz=theta_kb,                                                     _r_sag=1.e+40, _size_tang=0.9, _nvx=0, _nvy=np.cos(theta_kb),                                                     _nvz=-np.sin(theta_kb), _tvx=0, _tvy=-np.sin(theta_kb), _x=0, _y=0,                                                     _treat_in_out=1) 
     wf_dist_om = wpg.optical_elements.WF_dist(1500, 100, om_clear_ap, 2*om_clear_ap)
-    defineOPD(wf_dist_om, os.path.join(mirror_data_dir,'mirror2.dat'), 2, '\t', 'x',                theta_kb, scale=2)
+    defineOPD(wf_dist_om, os.path.join(mirror_data_dir,'mirror1.dat'), 2, '\t', 'x',                theta_kb, scale=2)
     if isIpynb:
         meshT = wf_dist_om.mesh
         opdTmp=np.array(wf_dist_om.arTr)[1::2].reshape(meshT.ny,meshT.nx)
         figure(); pylab.imshow(opdTmp,extent=[meshT.xStart,meshT.xFin,meshT.yStart,meshT.yFin])
         pylab.title('OPD [m]');pylab.xlabel('x (m)'); pylab.ylabel('y (m)')  
     wf_dist_hfm = wpg.optical_elements.WF_dist(1500, 100, kb_clear_ap, kb_clear_ap)
-    defineOPD(wf_dist_hfm, os.path.join(mirror_data_dir,'mirror1.dat'), 2, '\t', 'x',                theta_kb, scale=2, stretching=kb_mirror_length/0.8)
+    defineOPD(wf_dist_hfm, os.path.join(mirror_data_dir,'mirror2.dat'), 2, '\t', 'x',                theta_kb, scale=2, stretching=kb_mirror_length/0.8)
     if isIpynb:
         meshT = wf_dist_hfm.mesh
         opdTmp=np.array(wf_dist_hfm.arTr)[1::2].reshape(meshT.ny,meshT.nx)
         figure(); pylab.imshow(opdTmp,extent=[meshT.xStart,meshT.xFin,meshT.yStart,meshT.yFin])
         pylab.title('OPD [m]');pylab.xlabel('x (m)'); pylab.ylabel('y (m)')  
     wf_dist_vfm = wpg.optical_elements.WF_dist(1100, 1500, kb_clear_ap, kb_clear_ap)
-    defineOPD(wf_dist_vfm, os.path.join(mirror_data_dir,'mirror2.dat'), 2, ' ', 'y',                theta_kb, scale=2, stretching=kb_mirror_length/0.8)
+    defineOPD(wf_dist_vfm, os.path.join(mirror_data_dir,'mirror1.dat'), 2, ' ', 'y',                theta_kb, scale=2, stretching=kb_mirror_length/0.8)
     if isIpynb:
         meshT = wf_dist_vfm.mesh
         opdTmp=np.array(wf_dist_vfm.arTr)[1::2].reshape(meshT.ny,meshT.nx)
