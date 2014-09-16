@@ -68,7 +68,7 @@ def defineOPD(opTrErMirr, mdatafile, ncol, delim, orient, theta, scale=1., stret
     :param scale: scaling factor for the mirror profile height errors
     :param stretching: scaling factor for the mirror profile x-axis (a hack, should be removed ASAP) 
     """
-    heightProfData = numpy.loadtxt(mdatafile).T
+    heightProfData = np.loadtxt(mdatafile).T
     heightProfData[0,:] = heightProfData[0,:] * stretching
     wpg.useful_code.srwutils.AuxTransmAddSurfHeightProfileScaled(opTrErMirr, heightProfData, orient, theta, scale)
     if isIpynb:
@@ -190,7 +190,7 @@ def propagate(in_fname, out_fname):
     defineOPD(wf_dist_om, os.path.join(mirror_data_dir,'mirror2.dat'), 2, '\t', 'x',                theta_kb, scale=2)
     if isIpynb:
         meshT = wf_dist_om.mesh
-        opdTmp=numpy.array(wf_dist_om.arTr)[1::2].reshape(meshT.ny,meshT.nx)
+        opdTmp=np.array(wf_dist_om.arTr)[1::2].reshape(meshT.ny,meshT.nx)
         figure(); pylab.imshow(opdTmp,extent=[meshT.xStart,meshT.xFin,meshT.yStart,meshT.yFin])
         pylab.title('OPD [m]');pylab.xlabel('x (m)'); pylab.ylabel('y (m)')  
     wf_dist_hfm = wpg.optical_elements.WF_dist(1500, 100, kb_clear_ap, kb_clear_ap)
