@@ -203,7 +203,7 @@ def propagate(in_fname, out_fname):
     bl0.append(drift0,Use_PP(semi_analytical_treatment=0))
     bl0.append(ap1,    Use_PP(zoom=0.8))   #bl0.append(ap1,    Use_PP(zoom=1.6, sampling=1/1.5))
     bl0.append(drift1, Use_PP(semi_analytical_treatment=1))
-    bl0.append(ap_kb,  Use_PP(zoom = 1.6, sampling = 1/1.2))#bl0.append(ap_kb,    Use_PP(zoom=5.4, sampling=1/6.4))
+    bl0.append(ap_kb,  Use_PP(zoom = 6.4, sampling = 1/16.))#bl0.append(ap_kb,    Use_PP(zoom=5.4, sampling=1/6.4))
     bl0.append(hfm, Use_PP())
     bl0.append(wf_dist_hfm, Use_PP())
     bl0.append(drift_in_kb, Use_PP(semi_analytical_treatment=1))
@@ -227,7 +227,7 @@ def propagate(in_fname, out_fname):
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
 
     #Resizing: decreasing Range of Horizontal and Vertical Position:
-    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.125, 1, 0.125,  1]);
+    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.25, 1, 0.25,  1]);
     
     fwhm = calculate_fwhm(wf)
     
