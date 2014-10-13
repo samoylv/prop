@@ -252,7 +252,7 @@ def propagate(in_fname, out_fname):
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
     
     #Resizing: decreasing Range of Horizontal and Vertical Position:
-    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.25, 1, 0.25,  1]);
+    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.5, 1, 0.5,  1]);
     
     fwhm = calculate_fwhm(wf)
     
