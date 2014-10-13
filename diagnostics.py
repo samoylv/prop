@@ -73,6 +73,9 @@ def show_diagnostics(prop_out_number):
     plt.hold(True)
     plt.plot(sz1[:,0],sz1[:,1],label='after propagating')
     plt.grid(True)
+    plt.title('Spectrum (x=y=0)')
+    plt.xlabel('[eV]')
+    plt.ylabel('[arb. unit]')
     plt.legend()
 
     plt.show()
