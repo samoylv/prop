@@ -15,8 +15,8 @@ python propagate.py --input-directory input_directory_name --output-directory ou
 
 
 
-Proppagation with custom beamlines:
+Propagation with a custom beamline:
 
 python propagate-mod.py --input-directory=simulation_test/FELsource --output-directory=simulation_test/prop/ -n 1 --beamline-file=my_beamline.py 
 
-my_beamline.py (or some other file) should define **get_beamline** function.
+my_beamline.py (or some other file) should contain a definition of function get_beamline(), the function returns a beamline.
