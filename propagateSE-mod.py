@@ -131,18 +131,20 @@ def get_intensity_on_axis(wfr):
 
 # In[ ]:
 
-def propagate(in_fname, out_fname):
+def propagate(in_fname, out_fname, get_beamline):
     """
     Propagate wavefront
     
     :param in_file: input wavefront file
     :param out_file: output file
+    :param get_beamline: function to build beamline
     """
     print('Start propagating:' + in_fname)
     wf=Wavefront()
     wf.load_hdf5(in_fname)
-    bl0 = get_beamline()
 
+    bl0 = get_beamline()
+    
     if isIpynb:
         print bl0
     
@@ -157,9 +159,9 @@ def propagate(in_fname, out_fname):
     wf.custom_fields['/misc/spectrum1'] = sz1
     
     wpg.srwlib.srwl.SetRepresElecField(wf._srwl_wf, 't')
-    
+
     #Resizing: decreasing Range of Horizontal and Vertical Position:
-    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.25, 1, 0.25,  1]);
+    wpg.srwlib.srwl.ResizeElecField(wf._srwl_wf, 'c', [0, 0.5, 1, 0.5,  1]);
     
     fwhm = calculate_fwhm(wf)
     
@@ -178,7 +180,6 @@ def propagate(in_fname, out_fname):
     mkdir_p(os.path.dirname(out_fname))
     wf.store_hdf5(out_fname)
     add_history(out_fname, in_fname)
-    print('...done')
 
 
 # In[ ]:
@@ -187,18 +188,19 @@ def propagate_wrapper(params):
     """
     Wrapper for passing parameters as a tupple from multiprocessing module
     """
-    (in_fname, out_fname) = params
-    return propagate(in_fname, out_fname)
+    (in_fname, out_fname, get_beamline) = params
+    return propagate(in_fname, out_fname, get_beamline)
 
 
 # In[ ]:
 
-def directory_process(in_dname, out_dname, cpu_number):
+def directory_process(in_dname, out_dname, get_beamline, cpu_number):
     """
     Process directory with in_dname\FELsource_out*.h5 files and store it after propagation in out_dname\prop_out*.h5 files
     
     :param in_dname: input directory name
     :param out_dname: ouput directory name
+    :param get_beamline: function to build beamline
     :param cpu_number: NUmber of CPUs for parallel computing
     
     """
@@ -213,7 +215,7 @@ def directory_process(in_dname, out_dname, cpu_number):
     
     print 'Found {} HDF5 files in {}'.format(len(input_files), in_dname)
     
-    batch_params = zip(input_files, out_files)
+    batch_params = zip(input_files, out_files, [get_beamline]*len(input_files))
     
     p=multiprocessing.Pool(processes=cpu_number)
 #     map(propagate_wrapper, batch_params)
@@ -264,7 +266,7 @@ def main():
         
     elif options.in_fname and options.out_fname:
         print 'Input file {}, output file {}'.format(options.in_fname, options.out_fname, get_beamline)
-        propagate(options.in_fname, options.out_fname)
+        propagate(options.in_fname, options.out_fname, get_beamline)
 
 
 # In[ ]:

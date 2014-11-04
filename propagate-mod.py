@@ -27,8 +27,8 @@ import errno
 if isS2E:
     sys.path.insert(0,'/data/S2E/packages/WPG/')
 else:
-    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
-#    sys.path.insert(0,'../..')
+#    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
+    sys.path.insert(0,'../..')
 
 import multiprocessing
 from glob import glob
@@ -149,7 +149,7 @@ def propagate(in_fname, out_fname, get_beamline):
     print('Start propagating:' + in_fname)
     wf=Wavefront()
     wf.load_hdf5(in_fname)
-    
+
     bl0 = get_beamline()
     
     if isIpynb:
@@ -273,7 +273,7 @@ def main():
         
     elif options.in_fname and options.out_fname:
         print 'Input file {}, output file {}'.format(options.in_fname, options.out_fname, get_beamline)
-        propagate(options.in_fname, options.out_fname)
+        propagate(options.in_fname, options.out_fname, get_beamline)
 
 
 # In[ ]:
