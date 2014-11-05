@@ -34,8 +34,8 @@ def get_beamline():
     :return: Beamline.
     """
 
-    distance0 = 300.
-    distance1 = 630.
+    distance0 = 246.5
+    distance1 = 683.5
     distance = distance0 + distance1
     f_hfm    = 3.0       # nominal focal length for HFM KB
     f_vfm    = 1.9       # nominal focal length for VFM KB
