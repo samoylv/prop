@@ -17,8 +17,8 @@ import errno
 if isS2E:
     #sys.path.insert(0,'/data/S2E/packages/WPG/')
     #mirror_data_dir = '/data/S2E/modules/prop/data_common'
-    sys.path.insert(0,'../packages/WPG/')
-    mirror_data_dir = '../modules/prop/data_common'
+    sys.path.insert(0,'packages/WPG/')
+    mirror_data_dir = 'modules/prop/data_common'
 else:
 #    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
     sys.path.insert(0,'../..')
