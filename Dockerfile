@@ -16,8 +16,8 @@ ENV PYTHON_MAJOR 2
 ENV PYTHON_MINOR 7
 RUN apt-get update && apt-get install -y \
     python${PYTHON_MAJOR}.${PYTHON_MINOR}-dev \
-    python-dev unzip python-numpy python-matplotlib \
-    python-pip python-scipy python-h5py ipython-notebook \ 
+    unzip python-numpy \
+    python-scipy python-h5py \ 
     wget \
     nano
 
