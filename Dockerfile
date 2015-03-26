@@ -15,6 +15,7 @@ RUN mkdir -p $ROOT_DIR
 ENV PYTHON_MAJOR 2
 ENV PYTHON_MINOR 7
 RUN apt-get update && apt-get install -y \
+    build-essential \
     python${PYTHON_MAJOR}.${PYTHON_MINOR}-dev \
     unzip python-numpy \
     python-scipy python-h5py \ 
