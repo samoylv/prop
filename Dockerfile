@@ -35,8 +35,8 @@ RUN mkdir -p $ROOT_DIR/packages && cd $ROOT_DIR/packages && \
 ###################
 
 RUN mkdir -p $ROOT_DIR/modules && cd $ROOT_DIR/modules && \
-    wget https://github.com/samoylv/prop/archive/master.zip -O prop-master.zip && \
-    unzip prop-master.zip && mv prop-master prop && rm prop-master.zip
+    wget https://github.com/samoylv/prop/archive/develop.zip -O prop-develop.zip && \
+    unzip prop-develop.zip && mv prop-develop prop && rm prop-develop.zip
 
 
 ###################
