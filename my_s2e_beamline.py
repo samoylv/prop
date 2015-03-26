@@ -4,7 +4,8 @@ from wpg import Wavefront
 import wpg.optical_elements
 from wpg.optical_elements import Use_PP
 
-mirror_data_dir = '/data/S2E/modules/prop/data_common'
+#mirror_data_dir = '/data/S2E/modules/prop/data_common'
+mirror_data_dir = 'data_common'
 
 def defineOPD(opTrErMirr, mdatafile, ncol, delim, orient, theta, scale=1., stretching=1.):
     """
