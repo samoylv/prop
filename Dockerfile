@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
 ###################
 RUN mkdir -p $ROOT_DIR/packages && cd $ROOT_DIR/packages && \
     wget http://github.com/samoylv/WPG/archive/develop.zip -O wpg-develop.zip && \
-    unzip wpg-develop.zip -d WPG && rm wpg-develop.zip && \
+    unzip wpg-develop.zip && mv WPG-develop WPG && rm wpg-develop.zip && \
     cd WPG && make all && rm -rf build
     
 ###################
@@ -36,7 +36,7 @@ RUN mkdir -p $ROOT_DIR/packages && cd $ROOT_DIR/packages && \
 
 RUN mkdir -p $ROOT_DIR/modules && cd $ROOT_DIR/modules && \
     wget https://github.com/samoylv/prop/archive/master.zip -O prop-master.zip && \
-    unzip prop-master.zip -d prop && rm prop-master.zip
+    unzip prop-master.zip && mv prop-develop prop && rm prop-master.zip
 
 
 ###################
