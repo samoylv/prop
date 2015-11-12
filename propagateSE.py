@@ -15,8 +15,8 @@ import os
 import errno
 
 if isS2E:
-    sys.path.insert(0,'/simS2E/packages/WPG/')
-    mirror_data_dir = '/simS2E/modules/prop/data_common'
+    sys.path.insert(0,'/home/packages/WPG/')
+    mirror_data_dir = '/home/modules/prop/data_common'
 else:
 #    sys.path.insert(0,'/home/makov/workspace/my/xfel/WPG/')
     sys.path.insert(0,'../..')
@@ -185,15 +185,11 @@ def propagate(in_fname, out_fname):
     ap1   = wpg.optical_elements.Aperture('r','a', om_clear_ap, 2*om_clear_ap)
     ap_kb = wpg.optical_elements.Aperture('r','a', kb_clear_ap, kb_clear_ap)
     hfm    = wpg.optical_elements.Mirror_elliptical(
-                    _p=distance, _q=(distance_hfm_vfm+distance_foc), _ang_graz=theta_kb,
-                    _r_sag=1.e+40, _size_tang=0.9, _nvx=np.cos(theta_kb),  _nvy=0,
-                    _nvz=-np.sin(theta_kb), _tvx=-np.sin(theta_kb), _tvy=0, _x=0, _y=0,
-                    _treat_in_out=1)     
+                    orient='x',p=distance, q=(distance_hfm_vfm+distance_foc),
+                    thetaE=theta_kb, theta0=theta_kb, length=0.9)
     vfm    = wpg.optical_elements.Mirror_elliptical(
-                    _p=(distance+distance_hfm_vfm), _q=distance_foc, _ang_graz=theta_kb,
-                    _r_sag=1.e+40, _size_tang=0.9, _nvx=0, _nvy=np.cos(theta_kb),
-                    _nvz=-np.sin(theta_kb), _tvx=0, _tvy=-np.sin(theta_kb), _x=0, _y=0,
-                    _treat_in_out=1) 
+                    orient='y',p=(distance+distance_hfm_vfm), q=distance_foc,
+                    thetaE=theta_kb, theta0=theta_kb, length=0.9)
     wf_dist_om = wpg.optical_elements.WF_dist(1500, 100, om_clear_ap, 2*om_clear_ap)
     defineOPD(wf_dist_om, os.path.join(mirror_data_dir,'mirror2.dat'), 2, '\t', 'x',
               theta_kb, scale=2)
